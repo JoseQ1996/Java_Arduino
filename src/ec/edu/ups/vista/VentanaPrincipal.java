@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author  José Quinde
+ * @author José Quinde
  */
 public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEventListener {
 
@@ -29,7 +29,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
      * Creates new form VentanaPrincipal
      */
     private NRSerialPort puertoUSB;
-
+    private int valorPot;
     public VentanaPrincipal() {
         initComponents();
         cargarImagenes();
@@ -41,7 +41,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
             puertoUSB.connect();
             puertoUSB.notifyOnDataAvailable(true);
             puertoUSB.addEventListener(this);
-            
+
             txtEstado.setText("Puerto USB Listo...");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -66,9 +66,10 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         }
 
     }
-    public void cargarImagenes(){
-        ImageIcon apagado=new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/red.png"));
-        ImageIcon icono=new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(),Image.SCALE_DEFAULT));
+
+    public void cargarImagenes() {
+        ImageIcon apagado = new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/red.png"));
+        ImageIcon icono = new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(), Image.SCALE_DEFAULT));
         led1.setIcon(icono);
         led2.setIcon(icono);
         led3.setIcon(icono);
@@ -76,13 +77,63 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         led5.setIcon(icono);
         led6.setIcon(icono);
         led7.setIcon(icono);
-        
-        
+
     }
-    public void prenderLed(JLabel l){
-      ImageIcon apagado=new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/green.png"));
-        ImageIcon icono=new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(),Image.SCALE_DEFAULT));
-        l.setIcon(icono);  
+
+    public void prenderLed(JLabel l) {
+        ImageIcon apagado = new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/green.png"));
+        ImageIcon icono = new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(), Image.SCALE_DEFAULT));
+        l.setIcon(icono);
+    }
+    public void apagarLed(JLabel l) {
+        ImageIcon apagado = new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/red.png"));
+        ImageIcon icono = new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(), Image.SCALE_DEFAULT));
+        l.setIcon(icono);
+    }
+
+    public void controlLeds(int valor) {
+        if (valor == 1) {
+            prenderLed(led1);
+        }
+        if (valor == 2) {
+            prenderLed(led2);
+        }
+        if (valor == 3) {
+            prenderLed(led3);
+        }
+        if (valor == 4) {
+            prenderLed(led4);
+        }
+        if (valor == 5) {
+            prenderLed(led5);
+        }
+        if (valor == 6) {
+            prenderLed(led6);
+        }
+        if (valor == 7) {
+            prenderLed(led7);
+        }
+        if (valor == 8) {
+            apagarLed(led1);
+        }
+        if (valor == 9) {
+            apagarLed(led2);
+        }
+        if (valor == 10) {
+            apagarLed(led3);
+        }
+        if (valor == 11) {
+            apagarLed(led4);
+        }
+        if (valor == 12) {
+            apagarLed(led5);
+        }
+        if (valor == 13) {
+            apagarLed(led6);
+        }
+        if (valor == 14) {
+            apagarLed(led7);
+        }
     }
 
     /**
@@ -116,6 +167,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jSlider1 = new javax.swing.JSlider();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -155,7 +207,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         txtEstado.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         txtEstado.setForeground(new java.awt.Color(51, 255, 51));
         getContentPane().add(txtEstado);
-        txtEstado.setBounds(268, 50, 338, 30);
+        txtEstado.setBounds(220, 50, 338, 30);
 
         bntLed1.setBackground(new java.awt.Color(0, 102, 204));
         bntLed1.setText("LED 1");
@@ -254,24 +306,62 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
 
         jButton1.setBackground(new java.awt.Color(153, 153, 0));
         jButton1.setText("Secuencia 1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1);
         jButton1.setBounds(285, 289, 113, 42);
 
         jButton2.setBackground(new java.awt.Color(153, 153, 0));
         jButton2.setText("Secuencia 2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2);
         jButton2.setBounds(285, 344, 113, 42);
 
         jButton3.setBackground(new java.awt.Color(153, 153, 0));
         jButton3.setText("Secuencia 3");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3);
         jButton3.setBounds(285, 399, 113, 42);
 
         jButton4.setBackground(new java.awt.Color(255, 51, 0));
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jButton4.setText("Detener");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4);
         jButton4.setBounds(285, 448, 113, 42);
+
+        jSlider1.setBackground(new java.awt.Color(102, 102, 102));
+        jSlider1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jSlider1.setForeground(new java.awt.Color(102, 255, 0));
+        jSlider1.setMajorTickSpacing(100);
+        jSlider1.setMaximum(634);
+        jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider1.setPaintLabels(true);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setToolTipText("");
+        jSlider1.setValue(10);
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+        getContentPane().add(jSlider1);
+        jSlider1.setBounds(770, 70, 100, 410);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/fondo2.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -293,24 +383,23 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        if(puertoUSB.isConnected()){
-        desconectar();
-        }
-        else{
+        if (puertoUSB.isConnected()) {
+            desconectar();
+        } else {
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
 
     private void btnLed5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLed5ActionPerformed
         // TODO add your handling code here:
-         enviarDato(9);
-         prenderLed(led5);
+        enviarDato(9);
+        prenderLed(led5);
     }//GEN-LAST:event_btnLed5ActionPerformed
 
     private void btnLed6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLed6ActionPerformed
         // TODO add your handling code here:
-         enviarDato(10);
-         prenderLed(led6);
+        enviarDato(10);
+        prenderLed(led6);
     }//GEN-LAST:event_btnLed6ActionPerformed
 
     private void bntLed1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntLed1ActionPerformed
@@ -327,27 +416,65 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
 
     private void btnLed2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLed2ActionPerformed
         // TODO add your handling code here:
-         enviarDato(6);
-         prenderLed(led2);
+        enviarDato(6);
+        prenderLed(led2);
     }//GEN-LAST:event_btnLed2ActionPerformed
 
     private void btnLed3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLed3ActionPerformed
         // TODO add your handling code here:
-         enviarDato(7);
-         prenderLed(led3);
+        enviarDato(7);
+        prenderLed(led3);
     }//GEN-LAST:event_btnLed3ActionPerformed
 
     private void btnLed4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLed4ActionPerformed
         // TODO add your handling code here:
-         enviarDato(8);
-         prenderLed(led4);
+        enviarDato(8);
+        prenderLed(led4);
     }//GEN-LAST:event_btnLed4ActionPerformed
 
     private void btnLed7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLed7ActionPerformed
         // TODO add your handling code here:
-         enviarDato(11);
-         prenderLed(led7);
+        enviarDato(11);
+        prenderLed(led7);
     }//GEN-LAST:event_btnLed7ActionPerformed
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+        // TODO add your handling code here:
+        valorPot=jSlider1.getValue();
+        if(valorPot<200 && valorPot>0){
+            enviarDato(60);
+        }
+        if(valorPot<400 && valorPot>201){
+           enviarDato(61); 
+        }
+        if(valorPot<600 && valorPot>401){
+             enviarDato(62); 
+        }
+        if(valorPot>601){
+             enviarDato(63); 
+        }
+        
+    }//GEN-LAST:event_jSlider1StateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         enviarDato(55);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+         enviarDato(56);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+         enviarDato(57);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+         enviarDato(58);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -400,6 +527,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel led1;
     private javax.swing.JLabel led2;
     private javax.swing.JLabel led3;
@@ -412,20 +540,22 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
 
     @Override
     public void serialEvent(SerialPortEvent evento) {
-        try{
-          if(evento.getEventType()==SerialPortEvent.DATA_AVAILABLE){
-              DataInputStream lectura=new DataInputStream(puertoUSB.getInputStream());
-              if(lectura.available()>0){
-                  int valor=lectura.read();
-                  /*
-                  if(valor==50){
-                      JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
-                  }
-                          */
-                  System.out.println(valor);
-              }
-          }  
-        }catch(Exception ex){
+        try {
+            if (evento.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+                DataInputStream lectura = new DataInputStream(puertoUSB.getInputStream());
+                if (lectura.available() > 0) {
+                    int valor = lectura.read();
+                    //System.out.println(valor);
+                    controlLeds(valor);
+                    if (valor == 50) {
+                        cargarImagenes();                        
+                        //JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
+                    }
+                   
+
+                }
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
