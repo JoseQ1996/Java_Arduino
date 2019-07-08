@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author José Quinde
+ * @author José Quinde- Franklin Orellana
  */
 public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEventListener {
 
@@ -34,7 +34,9 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         initComponents();
         cargarImagenes();
     }
-
+    /**
+     * Clase que sirve para conectar Java con Arduino
+     */
     public void conectar() {
         try {
             puertoUSB = new NRSerialPort("COM5", 9600);
@@ -48,14 +50,19 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         }
 
     }
-
+    /**
+     * Sirve para desconectar Java con Arduino
+     */
     public void desconectar() {
         if (puertoUSB.isConnected()) {
             puertoUSB.disconnect();
             txtEstado.setText("Puerto USB Desconectado.....");
         }
     }
-
+    /**
+     * Sirve para poder enviar un valor al arduino
+     * @param valor 
+     */
     public void enviarDato(int valor) {
         try {
             OutputStream escritura = puertoUSB.getOutputStream();
@@ -66,7 +73,9 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         }
 
     }
-
+    /**
+     * Carga las imagenes de los leds apagados
+     */
     public void cargarImagenes() {
         ImageIcon apagado = new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/red.png"));
         ImageIcon icono = new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(), Image.SCALE_DEFAULT));
@@ -79,18 +88,28 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         led7.setIcon(icono);
 
     }
-
+    /**
+     * Metodo que prende un led 
+     * @param l 
+     */
     public void prenderLed(JLabel l) {
         ImageIcon apagado = new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/green.png"));
         ImageIcon icono = new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(), Image.SCALE_DEFAULT));
         l.setIcon(icono);
     }
+    /**
+     * Metodo que apaga un led
+     * @param l 
+     */
     public void apagarLed(JLabel l) {
         ImageIcon apagado = new ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/red.png"));
         ImageIcon icono = new ImageIcon(apagado.getImage().getScaledInstance(led1.getWidth(), led1.getHeight(), Image.SCALE_DEFAULT));
         l.setIcon(icono);
     }
-
+    /**
+     * Control de leds por arduino 
+     * @param valor 
+     */
     public void controlLeds(int valor) {
         if (valor == 1) {
             prenderLed(led1);
@@ -366,7 +385,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/imagenes/fondo2.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 940, 580);
+        jLabel1.setBounds(0, 0, 930, 600);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -439,7 +458,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
     }//GEN-LAST:event_btnLed7ActionPerformed
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
-        // TODO add your handling code here:
+        // Funciona como potenciometro virtual:
         valorPot=jSlider1.getValue();
         if(valorPot<200 && valorPot>0){
             enviarDato(60);
@@ -474,6 +493,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
          enviarDato(58);
+         cargarImagenes();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -537,7 +557,10 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
     private javax.swing.JLabel led7;
     private javax.swing.JLabel txtEstado;
     // End of variables declaration//GEN-END:variables
-
+    /**
+    * Evento que recupera un dato de arduino
+    * @param evento 
+    */
     @Override
     public void serialEvent(SerialPortEvent evento) {
         try {
@@ -551,7 +574,22 @@ public class VentanaPrincipal extends javax.swing.JFrame implements SerialPortEv
                         cargarImagenes();                        
                         //JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
                     }
-                   
+                    if (valor == 71) {
+                        jSlider1.setValue(200);
+                        //JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
+                    }
+                   if (valor == 72) {
+                        jSlider1.setValue(400);
+                        //JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
+                    }
+                   if (valor == 73) {
+                        jSlider1.setValue(600);
+                        //JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
+                    }
+                   if (valor == 74) {
+                        jSlider1.setValue(630);
+                        //JOptionPane.showMessageDialog(this, "Hay una peticion desde arduino");
+                    }
 
                 }
             }
